@@ -572,21 +572,25 @@ class SIReader(object):
     @staticmethod
     def _decode_cardnr(number):
         """Decodes a 4 byte cardnr to an int. SI-Card numbering is a bit odd:
-           SI-Card 5:     byte 0:   always 0 (not stored on the card)
-                          byte 1:   card series (stored on the card as CNS)
-                          byte 2,3: card number
-                          printed:  100'000*CNS + card number
-                          nr range: 1-65'000 + 200'001-265'000 + 300'001-365'000 + 400'001-465'000
+
+           SI-Card 5:
+              - byte 0:   always 0 (not stored on the card)
+              - byte 1:   card series (stored on the card as CNS)
+              - byte 2,3: card number
+              - printed:  100'000*CNS + card number
+              - nr range: 1-65'000 + 200'001-265'000 + 300'001-365'000 + 400'001-465'000
+
            SI-Card 6/6*/8/9/10/11/pCard/tCard/fCard/SIAC1:
-                          byte 0:   card series (SI6:00, SI9:01, SI8:02,
-                                        pCard:04, tCard:06, fCard:0E, SI10+SI11+SIAC1:0F)
-                          byte 1-3: card number
-                          printed:  only card number
-                          nr range: SI6: 500'000-999'999 + 2'003'000-2'003'400 (WM2003) + 16'711'680-16'777'215 (SI6*)
-                                    SI9: 1'000'000-1'999'999, SI8: 2'000'000-2'999'999
-                                    pCard: 4'000'000-4'999'999, tCard: 6'000'000-6'999'999
-                                    SI10: 7'000'000-7'999'999, SIAC1: 8'000'000-8'999'999
-                                    SI11: 9'000'000-9'999'999, fCard: 14'000'000-14'999'999
+              - byte 0:   card series (SI6:00, SI9:01, SI8:02, pCard:04, tCard:06, fCard:0E, SI10+SI11+SIAC1:0F)
+              - byte 1-3: card number
+              - printed:  only card number
+              - nr range:
+                  - SI6: 500'000-999'999 + 2'003'000-2'003'400 (WM2003) + 16'711'680-16'777'215 (SI6*)
+                  - SI9: 1'000'000-1'999'999, SI8: 2'000'000-2'999'999
+                  - pCard: 4'000'000-4'999'999, tCard: 6'000'000-6'999'999
+                  - SI10: 7'000'000-7'999'999, SIAC1: 8'000'000-8'999'999
+                  - SI11: 9'000'000-9'999'999, fCard: 14'000'000-14'999'999
+
            The card nr ranges guarantee that no ambigous values are possible
            (500'000 = 0x07A120 > 0x04FFFF = 465'535 = highest technically possible value on a SI5)
         """
