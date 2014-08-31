@@ -1,0 +1,4 @@
+*.pyc
+dist
+build
+sireader.egg-info
