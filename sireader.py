@@ -18,6 +18,7 @@
 sireader.py - Classes to read out si card data from BSM-7/8 stations.
 """
 
+from __future__ import print_function
 from serial import Serial
 from serial.serialutil import SerialException
 from datetime import datetime, timedelta, time
@@ -285,7 +286,7 @@ class SIReader(object):
                 try:
                     self._connect_reader(port)
                     return
-                except (SIReaderException, SIReaderTimeout), msg:
+                except (SIReaderException, SIReaderTimeout) as msg:
                     errors = '%sport: %s: %s\n' % (errors, port, msg)
                     pass
 
@@ -423,11 +424,11 @@ class SIReader(object):
         except (SIReaderException, SIReaderTimeout):
             try:
                 self._serial.baudrate = 4800
-            except (SerialException, OSError), msg:
+            except (SerialException, OSError) as msg:
                 raise SIReaderException('Could not set port speed to 4800: %s' % msg)
             try:
                 self._send_command(SIReader.C_SET_MS, SIReader.P_MS_DIRECT)
-            except SIReaderException, msg:
+            except SIReaderException as msg:
                 raise SIReaderException('This module only works with BSM7/8 stations: %s' % msg)
 
         self.port = port
@@ -674,12 +675,12 @@ class SIReader(object):
             crc = SIReader._crc(command_string)
             cmd = SIReader.STX + command_string + crc + SIReader.ETX
             if self._debug:
-                print "==>> command '%s', parameters %s, crc %s" % (hexlify(command),
+                print("==>> command '%s', parameters %s, crc %s" % (hexlify(command),
                                                                     ' '.join([hexlify(c) for c in parameters]),
                                                                     hexlify(crc),
-                                                                    )
+                                                                    ))
             self._serial.write(cmd)
-        except (SerialException, OSError),  msg:
+        except (SerialException, OSError) as  msg:
             raise SIReaderException('Could not send command: %s' % msg)
 
         if self._logfile:
@@ -716,13 +717,13 @@ class SIReader(object):
             etx = self._serial.read()
 
             if self._debug:
-                print "<<== command '%s', len %i, station %s, data %s, crc %s, etx %s" % (hexlify(cmd),
+                print("<<== command '%s', len %i, station %s, data %s, crc %s, etx %s" % (hexlify(cmd),
                                                                                           ord(length),
                                                                                           hexlify(station),
                                                                                           ' '.join([hexlify(c) for c in data]),
                                                                                           hexlify(crc),
                                                                                           hexlify(etx),
-                                                                                          )
+                                                                                          ))
 
             if etx != SIReader.ETX:
                 raise SIReaderException('No ETX byte received.')
@@ -734,7 +735,7 @@ class SIReader(object):
                 self._logfile.flush()
                 os.fsync(self._logfile)
                 
-        except (SerialException, OSError), msg:
+        except (SerialException, OSError) as msg:
             raise SIReaderException('Error reading command: %s' % msg)
 
         return (cmd, data)
@@ -822,7 +823,7 @@ class SIReaderReadout(SIReader):
         the station blinks and beeps to signal correct card readout."""
         try:
             self._serial.write(SIReader.ACK)
-        except (SerialException, OSError), msg:
+        except (SerialException, OSError) as msg:
             raise SIReaderException('Could not send ACK: %s' % msg)
 
     def _read_command(self, timeout=None):
