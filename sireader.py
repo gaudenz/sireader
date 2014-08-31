@@ -32,260 +32,260 @@ class SIReader(object):
        This is mainly for documentation purpose as most of this is not
        documented by SportIdent."""
 
-    CRC_POLYNOM = 0x8005
-    CRC_BITF    = 0x8000
+    CRC_POLYNOM      = 0x8005
+    CRC_BITF         = 0x8000
 
     # Protocol characters
-    STX           = '\x02'
-    ETX           = '\x03'
-    ACK           = '\x06' # when sent to BSx3..6 with a card inserted, causes beep until SI-card taken out
-    NAK           = '\x15'
-    DLE           = '\x10'
-    WAKEUP        = '\xFF'
+    STX              = '\x02'
+    ETX              = '\x03'
+    ACK              = '\x06' # when sent to BSx3..6 with a card inserted, causes beep until SI-card taken out
+    NAK              = '\x15'
+    DLE              = '\x10'
+    WAKEUP           = '\xFF'
 
     # Basic protocol commands, currently unused
-    BC_SET_CARDNO = '\x30'
-    BC_GET_SI5    = '\x31' # read out SI-card 5 data
-    BC_TRANS_REC  = '\x33' # autosend timestamp (online control) in very old stations (BSF3)
-    BC_SI5_WRITE  = '\x43' # write SI-card 5 data page: 02 43 (page: 0x30 to 0x37) (16 bytes) 03
-    BC_SI5_DET    = '\x46' # SI-card 5 inserted (46 49) or removed (46 4F)
-    BC_TRANS_REC2 = '\x53' # autosend timestamp (online control)
-    BC_TRANS_TIME = '\x54' # autosend timestamp (lightbeam trigger)
-    BC_GET_SI6    = '\x61' # read out SI-card 6 data (and in compatibility mode: model SI-card 8/9/10/11/SIAC/pCard/tCard as SI-card 6)
-    BC_SI6_WRITEPAGE='\x62'# write SI-card 6 data page: 02 62 (block: 0x00 to 0x07) (page: 0x00 to 0x07) (16 bytes) 03
-    BC_SI6_READWORD ='\x63'# read SI-card 6 data word: 02 63 (block: 0x00 to 0x07) (page: 0x00 to 0x07) (word: 0x00 to 0x03) 03
-    BC_SI6_WRITEWORD='\x64'# write SI-card 6 data word: 02 64 (block: 0x00 to 0x07) (page: 0x00 to 0x07) (word: 0x00 to 0x03) (4 bytes) 03
-    BC_SI6_DET    = '\x66' # SI-card 6 inserted
-    BC_SET_MS     = '\x70' # \x4D="M"aster, \x53="S"lave
-    BC_GET_MS     = '\x71'
-    BC_SET_SYS_VAL= '\x72'
-    BC_GET_SYS_VAL= '\x73'
-    BC_GET_BACKUP = '\x74' # Note: response carries '\xC4'!
-    BC_ERASE_BACKUP='\x75'
-    BC_SET_TIME   = '\x76'
-    BC_GET_TIME   = '\x77'
-    BC_OFF        = '\x78'
-    BC_RESET      = '\x79'
-    BC_GET_BACKUP2= '\x7A' # (for extended start and extended finish only) Note: response carries '\xCA'!
-    BC_SET_BAUD   = '\x7E' # \x00=4800 baud, \x01=38400 baud
+    BC_SET_CARDNO    = '\x30'
+    BC_GET_SI5       = '\x31' # read out SI-card 5 data
+    BC_TRANS_REC     = '\x33' # autosend timestamp (online control) in very old stations (BSF3)
+    BC_SI5_WRITE     = '\x43' # write SI-card 5 data page: 02 43 (page: 0x30 to 0x37) (16 bytes) 03
+    BC_SI5_DET       = '\x46' # SI-card 5 inserted (46 49) or removed (46 4F)
+    BC_TRANS_REC2    = '\x53' # autosend timestamp (online control)
+    BC_TRANS_TIME    = '\x54' # autosend timestamp (lightbeam trigger)
+    BC_GET_SI6       = '\x61' # read out SI-card 6 data (and in compatibility mode: model SI-card 8/9/10/11/SIAC/pCard/tCard as SI-card 6)
+    BC_SI6_WRITEPAGE = '\x62'# write SI-card 6 data page: 02 62 (block: 0x00 to 0x07) (page: 0x00 to 0x07) (16 bytes) 03
+    BC_SI6_READWORD  = '\x63'# read SI-card 6 data word: 02 63 (block: 0x00 to 0x07) (page: 0x00 to 0x07) (word: 0x00 to 0x03) 03
+    BC_SI6_WRITEWORD = '\x64'# write SI-card 6 data word: 02 64 (block: 0x00 to 0x07) (page: 0x00 to 0x07) (word: 0x00 to 0x03) (4 bytes) 03
+    BC_SI6_DET       = '\x66' # SI-card 6 inserted
+    BC_SET_MS        = '\x70' # \x4D="M"aster, \x53="S"lave
+    BC_GET_MS        = '\x71'
+    BC_SET_SYS_VAL   = '\x72'
+    BC_GET_SYS_VAL   = '\x73'
+    BC_GET_BACKUP    = '\x74' # Note: response carries '\xC4'!
+    BC_ERASE_BACKUP  = '\x75'
+    BC_SET_TIME      = '\x76'
+    BC_GET_TIME      = '\x77'
+    BC_OFF           = '\x78'
+    BC_RESET         = '\x79'
+    BC_GET_BACKUP2   = '\x7A' # (for extended start and extended finish only) Note: response carries '\xCA'!
+    BC_SET_BAUD      = '\x7E' # \x00=4800 baud, \x01=38400 baud
 
     # Extended protocol commands
-    C_GET_BACKUP  = '\x81'
-    C_SET_SYS_VAL = '\x82'
-    C_GET_SYS_VAL = '\x83'
-    C_SRR_WRITE   = '\xA2' # ShortRangeRadio - SysData write
-    C_SRR_READ    = '\xA3' # ShortRangeRadio - SysData read
-    C_SRR_QUERY   = '\xA6' # ShortRangeRadio - network device query
-    C_SRR_PING    = '\xA7' # ShortRangeRadio - heartbeat from linked devices, every 50 seconds
-    C_SRR_ADHOC   = '\xA8' # ShortRangeRadio - ad-hoc message, f.ex. from SI-ActiveCard
-    C_GET_SI5     = '\xB1' # read out SI-card 5 data
-    C_SI5_WRITE   = '\xC3' # write SI-card 5 data page: 02 C3 11 (page: 0x00 to 0x07) (16 bytes) (CRC) 03
-    C_TRANS_REC   = '\xD3' # autosend timestamp (online control)
-    C_CLEAR_CARD  = '\xE0' # found on SI-dev-forum: 02 E0 00 E0 00 03 (http://www.sportident.com/index.php?option=com_kunena&view=topic&catid=8&id=56#59)
-    C_GET_SI6     = '\xE1' # read out SI-card 6 data block
-    C_SI5_DET     = '\xE5' # SI-card 5 inserted
-    C_SI6_DET     = '\xE6' # SI-card 6 inserted
-    C_SI_REM      = '\xE7' # SI-card removed
-    C_SI9_DET     = '\xE8' # SI-card 8/9/10/11/p/t inserted
-    C_SI9_WRITE   = '\xEA' # write data page (double-word)
-    C_GET_SI9     = '\xEF' # read out SI-card 8/9/10/11/p/t data block
-    C_SET_MS      = '\xF0' # \x4D="M"aster, \x53="S"lave
-    C_GET_MS      = '\xF1'
-    C_ERASE_BACKUP= '\xF5'
-    C_SET_TIME    = '\xF6'
-    C_GET_TIME    = '\xF7'
-    C_OFF         = '\xF8'
-    C_BEEP        = '\xF9' # 02 F9 01 (number of beeps) (CRC16) 03
-    C_SET_BAUD    = '\xFE' # \x00=4800 baud, \x01=38400 baud
+    C_GET_BACKUP     = '\x81'
+    C_SET_SYS_VAL    = '\x82'
+    C_GET_SYS_VAL    = '\x83'
+    C_SRR_WRITE      = '\xA2' # ShortRangeRadio - SysData write
+    C_SRR_READ       = '\xA3' # ShortRangeRadio - SysData read
+    C_SRR_QUERY      = '\xA6' # ShortRangeRadio - network device query
+    C_SRR_PING       = '\xA7' # ShortRangeRadio - heartbeat from linked devices, every 50 seconds
+    C_SRR_ADHOC      = '\xA8' # ShortRangeRadio - ad-hoc message, f.ex. from SI-ActiveCard
+    C_GET_SI5        = '\xB1' # read out SI-card 5 data
+    C_SI5_WRITE      = '\xC3' # write SI-card 5 data page: 02 C3 11 (page: 0x00 to 0x07) (16 bytes) (CRC) 03
+    C_TRANS_REC      = '\xD3' # autosend timestamp (online control)
+    C_CLEAR_CARD     = '\xE0' # found on SI-dev-forum: 02 E0 00 E0 00 03 (http://www.sportident.com/index.php?option=com_kunena&view=topic&catid=8&id=56#59)
+    C_GET_SI6        = '\xE1' # read out SI-card 6 data block
+    C_SI5_DET        = '\xE5' # SI-card 5 inserted
+    C_SI6_DET        = '\xE6' # SI-card 6 inserted
+    C_SI_REM         = '\xE7' # SI-card removed
+    C_SI9_DET        = '\xE8' # SI-card 8/9/10/11/p/t inserted
+    C_SI9_WRITE      = '\xEA' # write data page (double-word)
+    C_GET_SI9        = '\xEF' # read out SI-card 8/9/10/11/p/t data block
+    C_SET_MS         = '\xF0' # \x4D="M"aster, \x53="S"lave
+    C_GET_MS         = '\xF1'
+    C_ERASE_BACKUP   = '\xF5'
+    C_SET_TIME       = '\xF6'
+    C_GET_TIME       = '\xF7'
+    C_OFF            = '\xF8'
+    C_BEEP           = '\xF9' # 02 F9 01 (number of beeps) (CRC16) 03
+    C_SET_BAUD       = '\xFE' # \x00=4800 baud, \x01=38400 baud
 
     # Protocol Parameters
-    P_MS_DIRECT   = '\x4D' # "M"aster
-    P_MS_INDIRECT = '\x53' # "S"lave
-    P_SI6_CB      = '\x08' # CardBlocks (see also O_SI6_CB)
+    P_MS_DIRECT      = '\x4D' # "M"aster
+    P_MS_INDIRECT    = '\x53' # "S"lave
+    P_SI6_CB         = '\x08' # CardBlocks (see also O_SI6_CB)
 
     # offsets in system data
     # Thanks to Simon Harston <simon@harston.de> for most of this information
     # currently only O_MODE, O_STATION_CODE and O_PROTO are used
-    O_OLD_SERIAL  = '\x00' # 2 bytes - only up to BSx6, numbers < 65.536
-    O_OLD_CPU_ID  = '\x02' # 2 bytes - only up to BSx6, numbers < 65.536
-    O_SERIAL_NO   = '\x00' # 4 bytes - only after BSx7, numbers > 70.000
-                           #   (if byte 0x00 > 0, better use OLD offsets)
-    O_SRR_CFG     = '\x04' # 1 byte - SRR-dongle configuration, bit mask value:
-                           #   xxxxxx1xb Auto send SIAC data
-                           #   xxxxx1xxb Sync time via radio
-    O_FIRMWARE    = '\x05' # 3 bytes
-    O_BUILD_DATE  = '\x08' # 3 bytes - YYMMDD
-    O_MODEL_ID    = '\x0B' # 2 bytes:
-                           #   6F21: SIMSRR1-AP (ShortRangeRadio AccessPoint = SRR-dongle)
-                           #   8003: BSF3 (serial numbers > 1.000)
-                           #   8004: BSF4 (serial numbers > 10.000)
-                           #   8084: BSM4-RS232
-                           #   8086: BSM6-RS232 / BSM6-USB
-                           #   8115: BSF5 (serial numbers > 50.000)
-                           #   8117 / 8118: BSF7 / BSF8 (serial no. 70.000...70.521, 72.002...72.009)
-                           #   8146: BSF6 (serial numbers > 30.000)
-                           #   8187 / 8188: BS7-SI-Master / BS8-SI-Master
-                           #   8197: BSF7 (serial numbers > 71.000, apart from 72.002...72.009)
-                           #   8198: BSF8 (serial numbers > 80.000)
-                           #   9197 / 9198: BSM7-RS232, BSM7-USB / BSM8-USB, BSM8-SRR
-                           #   9199: unknown
-                           #   9597: BS7-S (Sprinter)
-                           #   9D9A: BS11-BL (SIAC / Air+)
-                           #   B197 / B198: BS7-P / BS8-P (Printer)
-                           #   B897: BS7-GSM
-                           #   CD9B: BS11-BS-red / BS11-BS-blue (SIAC / Air+)
+    O_OLD_SERIAL     = '\x00' # 2 bytes - only up to BSx6, numbers < 65.536
+    O_OLD_CPU_ID     = '\x02' # 2 bytes - only up to BSx6, numbers < 65.536
+    O_SERIAL_NO      = '\x00' # 4 bytes - only after BSx7, numbers > 70.000
+                              #   (if byte 0x00 > 0, better use OLD offsets)
+    O_SRR_CFG        = '\x04' # 1 byte - SRR-dongle configuration, bit mask value:
+                              #   xxxxxx1xb Auto send SIAC data
+                              #   xxxxx1xxb Sync time via radio
+    O_FIRMWARE       = '\x05' # 3 bytes
+    O_BUILD_DATE     = '\x08' # 3 bytes - YYMMDD
+    O_MODEL_ID       = '\x0B' # 2 bytes:
+                              #   6F21: SIMSRR1-AP (ShortRangeRadio AccessPoint = SRR-dongle)
+                              #   8003: BSF3 (serial numbers > 1.000)
+                              #   8004: BSF4 (serial numbers > 10.000)
+                              #   8084: BSM4-RS232
+                              #   8086: BSM6-RS232 / BSM6-USB
+                              #   8115: BSF5 (serial numbers > 50.000)
+                              #   8117 / 8118: BSF7 / BSF8 (serial no. 70.000...70.521, 72.002...72.009)
+                              #   8146: BSF6 (serial numbers > 30.000)
+                              #   8187 / 8188: BS7-SI-Master / BS8-SI-Master
+                              #   8197: BSF7 (serial numbers > 71.000, apart from 72.002...72.009)
+                              #   8198: BSF8 (serial numbers > 80.000)
+                              #   9197 / 9198: BSM7-RS232, BSM7-USB / BSM8-USB, BSM8-SRR
+                              #   9199: unknown
+                              #   9597: BS7-S (Sprinter)
+                              #   9D9A: BS11-BL (SIAC / Air+)
+                              #   B197 / B198: BS7-P / BS8-P (Printer)
+                              #   B897: BS7-GSM
+                              #   CD9B: BS11-BS-red / BS11-BS-blue (SIAC / Air+)
 
-    O_MEM_SIZE    = '\x0D' # 1 byte - in KB
-    O_BAT_DATE    = '\x15' # 3 bytes - YYMMDD
-    O_BAT_CAP     = '\x19' # 2 bytes - battery capacity in mAh (as multiples of 14.0625?!)
-    O_BACKUP_PTR  = '\x1C' # 4 bytes - at positions 1C,1D,21,22
-    O_SI6_CB      = '\x33' # 1 byte - bitfield defining which SI Card 6 blocks to read:
-                           #   \x00=\xC1=read block0,6,7; \x08=\xFF=read all 8 blocks
-    O_SRR_CHANNEL = '\x34' # 1 byte - SRR-dongle frequency band: 0x00="red", 0x01="blue"
-    O_MEM_OVERFLOW= '\x3D' # 1 byte - memory overflow if != 0x00
-    O_PROGRAM     = '\x70' # 1 byte - station program: xx0xxxxxb competition, xx1xxxxxb training
-    O_MODE        = '\x71' # 1 byte - see SI station modes below
-    O_STATION_CODE= '\x72' # 1 byte
-    O_FEEDBACK    = '\x73' # 1 byte - feedback on punch (and other unknown bits), bit mask value:
-                           #   xxxxxxx1b optical feedback
-                           #   xxxxx1xxb audible feedback
-    O_PROTO       = '\x74' # 1 byte - protocol configuration, bit mask value:
-                           #   xxxxxxx1b extended protocol
-                           #   xxxxxx1xb auto send out
-                           #   xxxxx1xxb handshake (only valid for card readout)
-                           #   xxx1xxxxb access with password only
-                           #   1xxxxxxxb read out SI-card after punch (only for punch modes;
-                           #             depends on bit 2: auto send out or handshake)
-    O_WAKEUP_DATE = '\x75' # 3 bytes - YYMMDD
-    O_WAKEUP_TIME = '\x78' # 3 bytes - 1 byte day (see below), 2 bytes seconds after midnight/midday
-    O_SLEEP_TIME  = '\x7B' # 3 bytes - 1 byte day (see below), 2 bytes seconds after midnight/midday
-                           #   xxxxxxx0b - seconds relative to midnight/midday: 0 = am, 1 = pm
-                           #   xxxx000xb - day of week: 000 = Sunday, 110 = Saturday
-                           #   xx00xxxxb - week counter 0..3, relative to programming date
+    O_MEM_SIZE       = '\x0D' # 1 byte - in KB
+    O_BAT_DATE       = '\x15' # 3 bytes - YYMMDD
+    O_BAT_CAP        = '\x19' # 2 bytes - battery capacity in mAh (as multiples of 14.0625?!)
+    O_BACKUP_PTR     = '\x1C' # 4 bytes - at positions 1C,1D,21,22
+    O_SI6_CB         = '\x33' # 1 byte - bitfield defining which SI Card 6 blocks to read:
+                              #   \x00=\xC1=read block0,6,7; \x08=\xFF=read all 8 blocks
+    O_SRR_CHANNEL    = '\x34' # 1 byte - SRR-dongle frequency band: 0x00="red", 0x01="blue"
+    O_MEM_OVERFLOW   = '\x3D' # 1 byte - memory overflow if != 0x00
+    O_PROGRAM        = '\x70' # 1 byte - station program: xx0xxxxxb competition, xx1xxxxxb training
+    O_MODE           = '\x71' # 1 byte - see SI station modes below
+    O_STATION_CODE   = '\x72' # 1 byte
+    O_FEEDBACK       = '\x73' # 1 byte - feedback on punch (and other unknown bits), bit mask value:
+                              #   xxxxxxx1b optical feedback
+                              #   xxxxx1xxb audible feedback
+    O_PROTO          = '\x74' # 1 byte - protocol configuration, bit mask value:
+                              #   xxxxxxx1b extended protocol
+                              #   xxxxxx1xb auto send out
+                              #   xxxxx1xxb handshake (only valid for card readout)
+                              #   xxx1xxxxb access with password only
+                              #   1xxxxxxxb read out SI-card after punch (only for punch modes;
+                              #             depends on bit 2: auto send out or handshake)
+    O_WAKEUP_DATE    = '\x75' # 3 bytes - YYMMDD
+    O_WAKEUP_TIME    = '\x78' # 3 bytes - 1 byte day (see below), 2 bytes seconds after midnight/midday
+    O_SLEEP_TIME     = '\x7B' # 3 bytes - 1 byte day (see below), 2 bytes seconds after midnight/midday
+                              #   xxxxxxx0b - seconds relative to midnight/midday: 0 = am, 1 = pm
+                              #   xxxx000xb - day of week: 000 = Sunday, 110 = Saturday
+                              #   xx00xxxxb - week counter 0..3, relative to programming date
 
     # SI station modes
-    M_SIAC_SPECIAL= '\x01' # SI Air+ special register set (ON, OFF, Radio_ReadOut, etc.)
-    M_CONTROL     = '\x02'
-    M_START       = '\x03'
-    M_FINISH      = '\x04'
-    M_READOUT     = '\x05'
-    M_CLEAR_OLD   = '\x06' # without start-number (not used anymore)
-    M_CLEAR       = '\x07' # with start-number = standard
-    M_CHECK       = '\x0A'
-    M_PRINTOUT    = '\x0B' # BS7-P Printer-station (Note: also used by SRR-Receiver-module)
-    M_START_TRIG  = '\x0C' # BS7-S (Sprinter) with external trigger
-    M_FINISH_TRIG = '\x0D' # BS7-S (Sprinter) with external trigger
-    M_BC_CONTROL  = '\x12' # SI Air+ / SIAC Beacon mode
-    M_BC_START    = '\x13' # SI Air+ / SIAC Beacon mode
-    M_BC_FINISH   = '\x14' # SI Air+ / SIAC Beacon mode
-    M_BC_READOUT  = '\x15' # SI Air+ / SIAC Beacon mode
-    SUPPORTED_MODES = (M_CONTROL, M_START, M_FINISH, M_READOUT, M_CLEAR, M_CHECK)
+    M_SIAC_SPECIAL     = '\x01' # SI Air+ special register set (ON, OFF, Radio_ReadOut, etc.)
+    M_CONTROL          = '\x02'
+    M_START            = '\x03'
+    M_FINISH           = '\x04'
+    M_READOUT          = '\x05'
+    M_CLEAR_OLD        = '\x06' # without start-number (not used anymore)
+    M_CLEAR            = '\x07' # with start-number = standard
+    M_CHECK            = '\x0A'
+    M_PRINTOUT         = '\x0B' # BS7-P Printer-station (Note: also used by SRR-Receiver-module)
+    M_START_TRIG       = '\x0C' # BS7-S (Sprinter) with external trigger
+    M_FINISH_TRIG      = '\x0D' # BS7-S (Sprinter) with external trigger
+    M_BC_CONTROL       = '\x12' # SI Air+ / SIAC Beacon mode
+    M_BC_START         = '\x13' # SI Air+ / SIAC Beacon mode
+    M_BC_FINISH        = '\x14' # SI Air+ / SIAC Beacon mode
+    M_BC_READOUT       = '\x15' # SI Air+ / SIAC Beacon mode
+    SUPPORTED_MODES    = (M_CONTROL, M_START, M_FINISH, M_READOUT, M_CLEAR, M_CHECK)
 
     # Weekday encoding (only for reference, currently unused)
-    D_SUNDAY      = 0b000
-    D_MONDAY      = 0b001
-    D_TUESDAY     = 0b010
-    D_WEDNESDAY   = 0b011
-    D_THURSDAY    = 0b100
-    D_FRIDAY      = 0b101
-    D_SATURDAY    = 0b110
-    D_UNKNOWN     = 0b111  # in D3-message from SIAC-beacon where no weekday-info is transmitted
+    D_SUNDAY           = 0b000
+    D_MONDAY           = 0b001
+    D_TUESDAY          = 0b010
+    D_WEDNESDAY        = 0b011
+    D_THURSDAY         = 0b100
+    D_FRIDAY           = 0b101
+    D_SATURDAY         = 0b110
+    D_UNKNOWN          = 0b111  # in D3-message from SIAC-beacon where no weekday-info is transmitted
 
     # Backup memory record length
-    REC_LEN       = 8 # Only in extended protocol, otherwise 6!
+    REC_LEN            = 8 # Only in extended protocol, otherwise 6!
 
     # General card data structure values
-    TIME_RESET    = '\xEE\xEE'
+    TIME_RESET         = '\xEE\xEE'
 
     # SI Card data structures
-    CARD          = {'SI5':{'CN2': 6,   # card number byte 2
-                            'CN1': 4,   # card number byte 1
-                            'CN0': 5,   # card number byte 0
-                            'ST' : 19,  # start time
-                            'FT' : 21,  # finish time
-                            'CT' : 25,  # check time
-                            'LT' : None,# clear time
-                            'RC' : 23,  # punch counter
-                            'P1' : 32,  # first punch
-                            'PL' : 3,   # punch data length in bytes
-                            'PM' : 30,  # punch maximum (punches 31-36 have no time)
-                            'CN' : 0,   # control number offset in punch record
-                            'PTH' :1,   # punchtime high byte offset in punch record
-                            'PTL' :2,   # punchtime low byte offset in punch record
-                            },
-                     'SI6':{'CN2': 11,
-                            'CN1': 12,
-                            'CN0': 13,
-                            'ST' : 26,
-                            'FT' : 22,
-                            'CT' : 30,
-                            'LT' : 34,
-                            'RC' : 18,
-                            'P1' : 128,
-                            'PL' : 4,
-                            'PM' : 64,
-                            'CN' : 1,
-                            'PTH': 2,
-                            'PTL': 3,
-                            },
-                     'SI8':{'CN2': 25,
-                            'CN1': 26,
-                            'CN0': 27,
-                            'ST' : 14,
-                            'FT' : 18,
-                            'CT' : 10,
-                            'LT' : None,
-                            'RC' : 22,
-                            'P1' : 136,
-                            'PL' : 4,
-                            'PM' : 50,
-                            'CN' : 1,
-                            'PTH': 2,
-                            'PTL': 3,
-                            'BC' : 2,   # number of blocks on card (only relevant for SI8 and above = those read with C_GET_SI9)
-                            },
-                     'SI9':{'CN2': 25,
-                            'CN1': 26,
-                            'CN0': 27,
-                            'ST' : 14,
-                            'FT' : 18,
-                            'CT' : 10,
-                            'LT' : None,
-                            'RC' : 22,
-                            'P1' : 56,
-                            'PL' : 4,
-                            'PM' : 50,
-                            'CN' : 1,
-                            'PTH': 2,
-                            'PTL': 3,
-                            'BC' : 2,
-                            },
-                    'SI10':{'CN2': 25,     # Same data structure for SI11
-                            'CN1': 26,
-                            'CN0': 27,
-                            'ST' : 14,
-                            'FT' : 18,
-                            'CT' : 10,
-                            'LT' : None,
-                            'RC' : 22,
-                            'P1' : 128, # would be 512 if all blocks were read, but blocks 1-3 are skipped on readout
-                            'PL' : 4,
-                            'PM' : 64,
-                            'CN' : 1,
-                            'PTH': 2,
-                            'PTL': 3,
-                            'BC' : 8,
-                            },
-                     }
+    CARD               = {'SI5':{'CN2': 6,   # card number byte 2
+                                 'CN1': 4,   # card number byte 1
+                                 'CN0': 5,   # card number byte 0
+                                 'ST' : 19,  # start time
+                                 'FT' : 21,  # finish time
+                                 'CT' : 25,  # check time
+                                 'LT' : None,# clear time
+                                 'RC' : 23,  # punch counter
+                                 'P1' : 32,  # first punch
+                                 'PL' : 3,   # punch data length in bytes
+                                 'PM' : 30,  # punch maximum (punches 31-36 have no time)
+                                 'CN' : 0,   # control number offset in punch record
+                                 'PTH': 1,   # punchtime high byte offset in punch record
+                                 'PTL': 2,   # punchtime low byte offset in punch record
+                             },
+                          'SI6':{'CN2': 11,
+                                 'CN1': 12,
+                                 'CN0': 13,
+                                 'ST' : 26,
+                                 'FT' : 22,
+                                 'CT' : 30,
+                                 'LT' : 34,
+                                 'RC' : 18,
+                                 'P1' : 128,
+                                 'PL' : 4,
+                                 'PM' : 64,
+                                 'CN' : 1,
+                                 'PTH': 2,
+                                 'PTL': 3,
+                             },
+                          'SI8':{'CN2': 25,
+                                 'CN1': 26,
+                                 'CN0': 27,
+                                 'ST' : 14,
+                                 'FT' : 18,
+                                 'CT' : 10,
+                                 'LT' : None,
+                                 'RC' : 22,
+                                 'P1' : 136,
+                                 'PL' : 4,
+                                 'PM' : 50,
+                                 'CN' : 1,
+                                 'PTH': 2,
+                                 'PTL': 3,
+                                 'BC' : 2,   # number of blocks on card (only relevant for SI8 and above = those read with C_GET_SI9)
+                             },
+                          'SI9':{'CN2': 25,
+                                 'CN1': 26,
+                                 'CN0': 27,
+                                 'ST' : 14,
+                                 'FT' : 18,
+                                 'CT' : 10,
+                                 'LT' : None,
+                                 'RC' : 22,
+                                 'P1' : 56,
+                                 'PL' : 4,
+                                 'PM' : 50,
+                                 'CN' : 1,
+                                 'PTH': 2,
+                                 'PTL': 3,
+                                 'BC' : 2,
+                             },
+                          'SI10':{'CN2': 25,     # Same data structure for SI11
+                                  'CN1': 26,
+                                  'CN0': 27,
+                                  'ST' : 14,
+                                  'FT' : 18,
+                                  'CT' : 10,
+                                  'LT' : None,
+                                  'RC' : 22,
+                                  'P1' : 128, # would be 512 if all blocks were read, but blocks 1-3 are skipped on readout
+                                  'PL' : 4,
+                                  'PM' : 64,
+                                  'CN' : 1,
+                                  'PTH': 2,
+                                  'PTL': 3,
+                                  'BC' : 8,
+                              },
+                      }
 
     # punch trigger in control mode data structure
-    T_OFFSET      = 8
-    T_CN          = 0
-    T_TIME        = 5
+    T_OFFSET           = 8
+    T_CN               = 0
+    T_TIME             = 5
 
     # backup memory in control mode 
-    BC_CN         = 3
-    BC_TIME       = 8
+    BC_CN              = 3
+    BC_TIME            = 8
 
     def __init__(self, port = None, debug = False, logfile = None):
         """Initializes communication with si station at port.
