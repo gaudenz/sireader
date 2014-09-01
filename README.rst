@@ -13,11 +13,9 @@ There are 3 classes in the sireader module. **SIReader** is the base class
 containing common functions. It's imported to have easy access to it's
 constants. **SIReaderReadout** implements classical card readout.
 **SIReaderControl** implements a station configured as control which
-continuously sends punches.
+continuously sends punches.::
 
-::
   from sireader import SIReader, SIReaderReadout, SIReaderControl
-
 
 SIReader only supports the so called "Extended Protocol" mode. If your
 base station is not in this mode you have to change the protocol mode
