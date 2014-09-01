@@ -3,6 +3,7 @@ SportIdent Reader
 =================
 
 Website: http://bosco.durcheinandertal.ch/
+
 GIT Repository: http://git.durcheinandertal.ch/?p=sireader.git;a=summary
 
 Usage
@@ -14,6 +15,7 @@ constants. **SIReaderReadout** implements classical card readout.
 **SIReaderControl** implements a station configured as control which
 continuously sends punches.
 
+::
   from sireader import SIReader, SIReaderReadout, SIReaderControl
 
 
