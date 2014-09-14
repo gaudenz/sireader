@@ -1,6 +1,6 @@
 #/usr/bin/env python
 #
-#    Copyright (C) 2008-2014  Gaudenz Steinlin <gaudenz@soziologie.ch>
+#    Copyright (C) 2008-2014  Gaudenz Steinlin <gaudenz@durcheinandertal.ch>
 #                       2014  Simon Harston <simon@harston.de>
 #
 #    This program is free software: you can redistribute it and/or modify
