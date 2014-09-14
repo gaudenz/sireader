@@ -11,7 +11,7 @@ with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
 setup(
     name='sireader',
 
-    version='1.0.0',
+    version='1.0.1.dev1',
 
     description='Python module to communicate with SportIdent stations',
     long_description=long_description,
