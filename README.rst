@@ -13,7 +13,9 @@ There are 3 classes in the sireader module. **SIReader** is the base class
 containing common functions. It's imported to have easy access to it's
 constants. **SIReaderReadout** implements classical card readout.
 **SIReaderControl** implements a station configured as control which
-continuously sends punches.::
+continuously sends punches.
+
+First import the relevant classes::
 
   from sireader import SIReader, SIReaderReadout, SIReaderControl
 
