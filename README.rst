@@ -2,6 +2,16 @@
 SportIdent Reader
 =================
 
+Sireader is a python module to communicate with a SportIdent main station to
+read out SportIdent cards. SportIdent is an electronic punching system mainly
+used for orienteering events.
+
+Sireader supports two major operation modes. It can be used for complete card
+readout or in control station mode to send punches from a control. The first mode
+is typically used for card readout after the finish line to read the card data
+into an event software. The second mode is used to get live result from an
+intermediate control.
+
 Website: http://bosco.durcheinandertal.ch/
 
 GIT Repository: http://git.durcheinandertal.ch/?p=sireader.git;a=summary
