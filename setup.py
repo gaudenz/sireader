@@ -13,7 +13,7 @@ setup(
 
     version='1.0.1.dev1',
 
-    description='Python module to communicate with SportIdent stations',
+    description='Python module to communicate with SportIdent main stations',
     long_description=long_description,
 
     url='http://bosco.durcheinandertal.ch/',
