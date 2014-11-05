@@ -909,7 +909,7 @@ class SIReaderControl(SIReader):
             raise SIReaderException('This command only supports stations in "Extended Protocol" '
                                     'mode. Switch mode first')
 
-        if not self.proto_config['autosend']:
+        if not self.proto_config['auto_send']:
             raise SIReaderException('This command only supports stations in "Autosend" '
                                     'mode. Switch mode first')
 
