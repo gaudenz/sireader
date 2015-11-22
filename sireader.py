@@ -795,9 +795,9 @@ class SIReader(object):
             crc = SIReader._crc(command_string)
             cmd = SIReader.STX + command_string + crc + SIReader.ETX
             if self._debug:
-                print("==>> command '%s', parameters %s, crc %s" % (hexlify(command),
-                                                                    ' '.join([hexlify(c) for c in parameters]),
-                                                                    hexlify(crc),
+                print("==>> command '%s', parameters %s, crc %s" % (hexlify(command).decode('ascii'),
+                                                                    ' '.join([hexlify(int2byte(c)).decode('ascii') for c in parameters]),
+                                                                    hexlify(crc).decode('ascii'),
                                                                     ))
             self._serial.write(cmd)
         except (SerialException, OSError) as  msg:
@@ -837,12 +837,12 @@ class SIReader(object):
             etx = self._serial.read()
 
             if self._debug:
-                print("<<== command '%s', len %i, station %s, data %s, crc %s, etx %s" % (hexlify(cmd),
+                print("<<== command '%s', len %i, station %s, data %s, crc %s, etx %s" % (hexlify(cmd).decode('ascii'),
                                                                                           byte2int(length),
-                                                                                          hexlify(station),
-                                                                                          ' '.join([hexlify(c) for c in data]),
-                                                                                          hexlify(crc),
-                                                                                          hexlify(etx),
+                                                                                          hexlify(station).decode('ascii'),
+                                                                                          ' '.join([hexlify(int2byte(c)).decode('ascii') for c in data]),
+                                                                                          hexlify(crc).decode('ascii'),
+                                                                                          hexlify(etx).decode('ascii'),
                                                                                           ))
 
             if etx != SIReader.ETX:
