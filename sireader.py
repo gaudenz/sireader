@@ -915,14 +915,12 @@ class SIReaderReadout(SIReader):
                                            SIReader.P_SI6_CB)[1][1:]
             raw_data += self._read_command()[1][1:]
             raw_data += self._read_command()[1][1:]
-            return SIReader._decode_carddata(raw_data, self.cardtype)
         elif self.cardtype in ('SI8', 'SI9'):
             raw_data = b''
             for b in range(SIReader.CARD[self.cardtype]['BC']):
                 raw_data += self._send_command(SIReader.C_GET_SI9,
                                                int2byte(b))[1][1:]
 
-            return SIReader._decode_carddata(raw_data, self.cardtype)
         elif self.cardtype == 'SI10':
             # Reading out SI10 cards block by block proved to be unreliable and slow
             # Thus reading with C_GET_SI9 and block number 8 = P_SI6_CB like SI6
