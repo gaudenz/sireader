@@ -14,7 +14,7 @@ intermediate control.
 
 Website: http://bosco.durcheinandertal.ch/
 
-GIT Repository: http://git.durcheinandertal.ch/?p=sireader.git;a=summary
+GIT Repository: https://github.com/gaudenz/sireader/
 
 Usage
 -----
